@@ -1,0 +1,14 @@
+SYNTHETIC SAMPLE DOCUMENT - NOT A REAL CERTIFICATE
+
+NORTHWIND LOGISTICS LTD
+LICENCE RENEWAL RECORD
+
+Review Cycle: 2026-27
+Application Reference: SUB-2026-1001
+Organization Name: Northwind Logistics Ltd
+Approved Scope: Bulk Storage
+Capacity: 120
+Certificate Serial: NB-2026-9911
+Valid Until: 2027-06-30
+
+All names, organizations, identifiers and dates in this sample are fictional.

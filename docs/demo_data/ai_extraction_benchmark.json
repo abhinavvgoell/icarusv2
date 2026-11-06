@@ -1,0 +1,247 @@
+{
+ "dataset_id": "arbiter-synthetic-extraction-v1",
+ "synthetic": true,
+ "description": "Hand-authored sample documents for an advisory extraction smoke evaluation. They are not representative of real third-party submissions.",
+ "cases": [
+  {
+   "id": "safety-standard-01",
+   "document_type": "safety_certificate",
+   "pages": [
+    "SAFETY CERTIFICATE\nOrganization Name: Aster Valley Holdings\nCertificate No: SAFE-2026-041\nValid Until: 2030-06-30"
+   ],
+   "expected_fields": [
+    {
+     "field_name": "organization_name",
+     "value": "Aster Valley Holdings",
+     "page": 1
+    },
+    {
+     "field_name": "certificate_number",
+     "value": "SAFE-2026-041",
+     "page": 1
+    },
+    {
+     "field_name": "valid_until",
+     "value": "2030-06-30",
+     "page": 1
+    }
+   ]
+  },
+  {
+   "id": "safety-two-page-02",
+   "document_type": "safety_certificate",
+   "pages": [
+    "SAMPLE SAFETY SERVICE\nApplication cover sheet\nSubmitted for review.",
+    "Issued to: Blue Orchid Services\nReference Number: SAFE-88-2026\nThis certificate is valid through 2029-11-15."
+   ],
+   "expected_fields": [
+    {
+     "field_name": "organization_name",
+     "value": "Blue Orchid Services",
+     "page": 2
+    },
+    {
+     "field_name": "certificate_number",
+     "value": "SAFE-88-2026",
+     "page": 2
+    },
+    {
+     "field_name": "valid_until",
+     "value": "2029-11-15",
+     "page": 2
+    }
+   ]
+  },
+  {
+   "id": "safety-cover-03",
+   "document_type": "safety_certificate",
+   "pages": [
+    "Cover note\nPrepared for the applicant.\nPlease see the attached certificate.",
+    "SAFETY CERTIFICATE\nName of Organization - Cobalt River Trading\nSerial: FS/77/26\nExpiry Date: 2031-03-01"
+   ],
+   "expected_fields": [
+    {
+     "field_name": "organization_name",
+     "value": "Cobalt River Trading",
+     "page": 2
+    },
+    {
+     "field_name": "certificate_number",
+     "value": "FS/77/26",
+     "page": 2
+    },
+    {
+     "field_name": "valid_until",
+     "value": "2031-03-01",
+     "page": 2
+    }
+   ]
+  },
+  {
+   "id": "prior-approval-04",
+   "document_type": "prior_approval",
+   "pages": [
+    "EXTENSION OF APPROVAL\nOrganization Name: Delta Crescent Logistics\nReference No. PRIOR/2026/771\nApproval valid until 2027-06-30."
+   ],
+   "expected_fields": [
+    {
+     "field_name": "organization_name",
+     "value": "Delta Crescent Logistics",
+     "page": 1
+    },
+    {
+     "field_name": "certificate_number",
+     "value": "PRIOR/2026/771",
+     "page": 1
+    },
+    {
+     "field_name": "valid_until",
+     "value": "2027-06-30",
+     "page": 1
+    }
+   ]
+  },
+  {
+   "id": "consent-letter-05",
+   "document_type": "consent_letter",
+   "pages": [
+    "PARTNER CONSENT LETTER\nIssued to: Emerald Coast Services\nLetter No: PART-2026-119\nValid through 2028-05-31."
+   ],
+   "expected_fields": [
+    {
+     "field_name": "organization_name",
+     "value": "Emerald Coast Services",
+     "page": 1
+    },
+    {
+     "field_name": "certificate_number",
+     "value": "PART-2026-119",
+     "page": 1
+    },
+    {
+     "field_name": "valid_until",
+     "value": "2028-05-31",
+     "page": 1
+    }
+   ]
+  },
+  {
+   "id": "declaration-two-page-06",
+   "document_type": "declaration",
+   "pages": [
+    "DECLARATION\nStatement of an authorized representative.",
+    "Organization Name: Fern Hill Trading\nDocument Reference: DECL-51-2026\nValid until 2030-12-31."
+   ],
+   "expected_fields": [
+    {
+     "field_name": "organization_name",
+     "value": "Fern Hill Trading",
+     "page": 2
+    },
+    {
+     "field_name": "certificate_number",
+     "value": "DECL-51-2026",
+     "page": 2
+    },
+    {
+     "field_name": "valid_until",
+     "value": "2030-12-31",
+     "page": 2
+    }
+   ]
+  },
+  {
+   "id": "staff-declaration-07",
+   "document_type": "staff_declaration",
+   "pages": [
+    "STAFF DECLARATION\nOrganization Name: Golden Banyan Services\nDeclaration No: DECL-2026-09\nDeclaration valid through 2027-12-31."
+   ],
+   "expected_fields": [
+    {
+     "field_name": "organization_name",
+     "value": "Golden Banyan Services",
+     "page": 1
+    },
+    {
+     "field_name": "certificate_number",
+     "value": "DECL-2026-09",
+     "page": 1
+    },
+    {
+     "field_name": "valid_until",
+     "value": "2027-12-31",
+     "page": 1
+    }
+   ]
+  },
+  {
+   "id": "safety-line-breaks-08",
+   "document_type": "safety_certificate",
+   "pages": [
+    "SAMPLE SAFETY SERVICE\nIssued to: Harbor Light Trading\nCertificate Number\nHFS-6002\nValid Until\n2032-01-31"
+   ],
+   "expected_fields": [
+    {
+     "field_name": "organization_name",
+     "value": "Harbor Light Trading",
+     "page": 1
+    },
+    {
+     "field_name": "certificate_number",
+     "value": "HFS-6002",
+     "page": 1
+    },
+    {
+     "field_name": "valid_until",
+     "value": "2032-01-31",
+     "page": 1
+    }
+   ]
+  },
+  {
+   "id": "safety-no-expiry-09",
+   "document_type": "safety_certificate",
+   "pages": [
+    "SAFETY CLEARANCE\nOrganization Name: Indigo Meadow Services\nCertificate No: IM-77-2026\nNo expiry date is printed on this sample."
+   ],
+   "expected_fields": [
+    {
+     "field_name": "organization_name",
+     "value": "Indigo Meadow Services",
+     "page": 1
+    },
+    {
+     "field_name": "certificate_number",
+     "value": "IM-77-2026",
+     "page": 1
+    }
+   ]
+  },
+  {
+   "id": "prior-approval-10",
+   "document_type": "prior_approval",
+   "pages": [
+    "APPROVAL FILE\nIndex",
+    "Scope and capacity details",
+    "Organization Name: Juniper Ridge Trading\nReference Number: PRIOR-JR-2026-15\nApproval valid through 2028-07-31."
+   ],
+   "expected_fields": [
+    {
+     "field_name": "organization_name",
+     "value": "Juniper Ridge Trading",
+     "page": 3
+    },
+    {
+     "field_name": "certificate_number",
+     "value": "PRIOR-JR-2026-15",
+     "page": 3
+    },
+    {
+     "field_name": "valid_until",
+     "value": "2028-07-31",
+     "page": 3
+    }
+   ]
+  }
+ ]
+}

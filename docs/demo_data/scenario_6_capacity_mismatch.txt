@@ -1,0 +1,11 @@
+SYNTHETIC SAMPLE DOCUMENT - NOT A REAL APPROVAL LETTER
+
+PRIOR APPROVAL LETTER
+
+Organization Name: Cascade Chemicals Ltd
+Certificate Serial: PRIOR-2024-5512
+Approved Scope: Chemical Handling
+Sanctioned Capacity: 60
+Valid Until: 2028-06-30
+
+All particulars in this sample record are for software testing only.

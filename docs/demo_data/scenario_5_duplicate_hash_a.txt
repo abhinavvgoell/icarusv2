@@ -1,0 +1,17 @@
+SAMPLE SAFETY CERTIFICATE
+
+Certificate Number: FSC/SAMPLE/2025/00791
+Issued By: Sample Fire & Emergency Services (fictional)
+Issuing Authority: Sample District Office
+
+Organization Name: Northwind Logistics Ltd
+Address: Unit 47, Sample Industrial Area
+
+This is to certify that the above-named organization has been inspected and found
+to meet the sample safety criteria used by this demonstration.
+
+Inspection Date: 15 September 2025
+Valid Until: 14 September 2028
+Digital Reference: SAMPLE-FIRE-2025-7291-A
+
+This document is fictional and exists only to exercise duplicate-file detection.

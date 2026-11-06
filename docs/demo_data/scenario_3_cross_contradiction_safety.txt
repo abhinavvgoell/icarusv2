@@ -1,0 +1,12 @@
+SYNTHETIC SAMPLE DOCUMENT - NOT A REAL CERTIFICATE
+
+SAFETY AND EMERGENCY ACCESS CLEARANCE CERTIFICATE
+
+Issued to:
+Organization Name: Cascade Chemical Works
+Address: Unit 4, Sample Industrial Estate
+Certificate Serial: SAFE-2026-884
+Valid Until: 2028-12-31
+
+This certificate records a fictional safety inspection outcome.
+Synthetic record for software evaluation only.

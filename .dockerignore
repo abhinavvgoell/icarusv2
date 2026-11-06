@@ -1,0 +1,14 @@
+.git/
+.venv/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+data/
+tests/
+docs/
+scripts/
+infra/
+.env
+.env.*
+requirements.txt
+requirements-runtime.in

@@ -1,0 +1,30 @@
+# Local secrets and environment files
+.env
+.env.*
+!.env.example
+
+# Python environments and generated runtime files
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.test-runtime*/
+.demo-walk-*/
+.demo-walk-dir
+.freebuff/
+*.log
+*.log.*
+*.err
+
+# Local application state and downloaded model weights
+*.db
+*.db-*
+data/uploads/
+data/models/
+/data/*.log*
+/.eval-out.json
+
+# Personal source material and chat attachments — never committed
+/reference/
+/.cloud-attachments/
+

@@ -1,0 +1,11 @@
+SYNTHETIC SAMPLE DOCUMENT - NOT A REAL CERTIFICATE
+
+ANNUAL SAFETY COMPLIANCE RECORD
+
+Organization Name: Northwind Logistics Ltd
+Certificate Serial: SAFE-2023-11
+Date of Issuance: 2023-03-31
+Valid Until: 2024-03-31
+
+Condition: This record lapses automatically on the validity date stated above.
+Synthetic test record for software demonstration only.

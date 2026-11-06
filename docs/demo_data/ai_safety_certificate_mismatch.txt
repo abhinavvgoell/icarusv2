@@ -1,0 +1,7 @@
+SYNTHETIC SAMPLE DOCUMENT - NOT A REAL CERTIFICATE
+
+Safety certificate issued by a fictional fire service to Northwind Logistics Ltd.
+Certificate serial SAFE-881-42.
+The certificate is valid until 2030-12-31.
+
+All names, organizations, identifiers and dates in this sample are fictional.

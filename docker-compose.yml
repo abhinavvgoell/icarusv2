@@ -1,0 +1,13 @@
+services:
+  arbiter:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - arbiter-data:/var/lib/arbiter
+    restart: unless-stopped
+
+volumes:
+  arbiter-data:

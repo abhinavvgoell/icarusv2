@@ -1,0 +1,363 @@
+{
+ "dataset_id": "arbiter-rule-evaluation-v1",
+ "synthetic": true,
+ "label_semantics": {
+  "expected_rules": "Rule IDs that must fire at least once for this case after the officer runs the pre-check.",
+  "note": "Any predicted rule outside expected_rules counts as a false positive. All organizations, documents and identifiers are invented for testing."
+ },
+ "cases": [
+  {
+   "id": "clean-renewal-complete",
+   "description": "Complete, consistent renewal application: every check should stay silent.",
+   "request_type": "licence_renewal",
+   "review_cycle": "2026-27",
+   "organization_name": "Riverside Logistics Ltd",
+   "scope_name": "Bulk Storage",
+   "requested_capacity": 120,
+   "documents": [
+    {
+     "document_type": "declaration",
+     "filename": "declaration.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nCertificate No: DECL-9001\n"
+    },
+    {
+     "document_type": "safety_certificate",
+     "filename": "safety.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nCertificate No: SAFE-9001\nValid Until: 2030-12-31\n"
+    },
+    {
+     "document_type": "prior_approval",
+     "filename": "prior.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nReference No: SUB-2025-9001\nApproved Scope: Bulk Storage\nApproved Capacity: 120\n"
+    }
+   ],
+   "expected_rules": [],
+   "forbidden_rules": [
+    "DOCS-REQUIRED-001",
+    "NAME-MATCH-001",
+    "FIELD-CONFLICT-001",
+    "SCOPE-MATCH-001",
+    "CAPACITY-MATCH-001",
+    "EXPIRY-001",
+    "DUPLICATE-001",
+    "EXTRACT-001",
+    "EXTRACT-002"
+   ]
+  },
+  {
+   "id": "missing-required-documents",
+   "description": "No uploads at all: only the illustrative checklist rule should fire.",
+   "request_type": "licence_renewal",
+   "review_cycle": "2026-27",
+   "organization_name": "Riverside Logistics Ltd",
+   "scope_name": "",
+   "requested_capacity": null,
+   "documents": [],
+   "expected_rules": [
+    "DOCS-REQUIRED-001"
+   ],
+   "forbidden_rules": [
+    "NAME-MATCH-001",
+    "FIELD-CONFLICT-001",
+    "EXPIRY-001",
+    "DUPLICATE-001"
+   ]
+  },
+  {
+   "id": "organization-name-mismatch",
+   "description": "Declaration names a different organization than the application declares; other documents carry no organization name.",
+   "request_type": "licence_renewal",
+   "review_cycle": "2026-27",
+   "organization_name": "Riverside Logistics Ltd",
+   "scope_name": "",
+   "requested_capacity": null,
+   "documents": [
+    {
+     "document_type": "declaration",
+     "filename": "declaration.txt",
+     "text": "Organization Name: Riverside Logistics Services\nCertificate No: DECL-9002\n"
+    },
+    {
+     "document_type": "safety_certificate",
+     "filename": "safety.txt",
+     "text": "Certificate No: SAFE-9002\nValid Until: 2030-12-31\n"
+    },
+    {
+     "document_type": "prior_approval",
+     "filename": "prior.txt",
+     "text": "Reference No: SUB-2025-9002\n"
+    }
+   ],
+   "expected_rules": [
+    "NAME-MATCH-001"
+   ],
+   "forbidden_rules": [
+    "DOCS-REQUIRED-001",
+    "FIELD-CONFLICT-001",
+    "EXPIRY-001"
+   ]
+  },
+  {
+   "id": "expired-safety-certificate",
+   "description": "Safety certificate carries an explicit past valid-until date.",
+   "request_type": "licence_renewal",
+   "review_cycle": "2026-27",
+   "organization_name": "Riverside Logistics Ltd",
+   "scope_name": "",
+   "requested_capacity": null,
+   "documents": [
+    {
+     "document_type": "declaration",
+     "filename": "declaration.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nCertificate No: DECL-9003\n"
+    },
+    {
+     "document_type": "safety_certificate",
+     "filename": "safety.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nCertificate No: SAFE-9003\nValid Until: 2024-01-01\n"
+    },
+    {
+     "document_type": "prior_approval",
+     "filename": "prior.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nReference No: SUB-2025-9003\n"
+    }
+   ],
+   "expected_rules": [
+    "EXPIRY-001"
+   ],
+   "forbidden_rules": [
+    "DOCS-REQUIRED-001",
+    "NAME-MATCH-001",
+    "FIELD-CONFLICT-001"
+   ]
+  },
+  {
+   "id": "byte-identical-duplicate",
+   "description": "Two checklist documents contain byte-identical content.",
+   "request_type": "licence_renewal",
+   "review_cycle": "2026-27",
+   "organization_name": "Riverside Logistics Ltd",
+   "scope_name": "",
+   "requested_capacity": null,
+   "documents": [
+    {
+     "document_type": "declaration",
+     "filename": "declaration.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nCertificate No: DUP-9004\n"
+    },
+    {
+     "document_type": "prior_approval",
+     "filename": "prior.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nCertificate No: DUP-9004\n"
+    },
+    {
+     "document_type": "safety_certificate",
+     "filename": "safety.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nCertificate No: SAFE-9004\nValid Until: 2030-12-31\n"
+    }
+   ],
+   "expected_rules": [
+    "DUPLICATE-001"
+   ],
+   "forbidden_rules": [
+    "DOCS-REQUIRED-001",
+    "NAME-MATCH-001",
+    "FIELD-CONFLICT-001"
+   ]
+  },
+  {
+   "id": "scope-item-mismatch",
+   "description": "Prior renewal letter states a different approved scope item than the application.",
+   "request_type": "licence_renewal",
+   "review_cycle": "2026-27",
+   "organization_name": "Riverside Logistics Ltd",
+   "scope_name": "Bulk Storage",
+   "requested_capacity": 120,
+   "documents": [
+    {
+     "document_type": "declaration",
+     "filename": "declaration.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nCertificate No: DECL-9005\n"
+    },
+    {
+     "document_type": "safety_certificate",
+     "filename": "safety.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nCertificate No: SAFE-9005\nValid Until: 2030-12-31\n"
+    },
+    {
+     "document_type": "prior_approval",
+     "filename": "prior.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nReference No: SUB-2025-9005\nApproved Scope: Chemical Handling\nApproved Capacity: 120\n"
+    }
+   ],
+   "expected_rules": [
+    "SCOPE-MATCH-001"
+   ],
+   "forbidden_rules": [
+    "DOCS-REQUIRED-001",
+    "NAME-MATCH-001",
+    "CAPACITY-MATCH-001"
+   ]
+  },
+  {
+   "id": "requested-vs-sanctioned-capacity",
+   "description": "Application requests more capacity than the prior approval letter states.",
+   "request_type": "licence_renewal",
+   "review_cycle": "2026-27",
+   "organization_name": "Riverside Logistics Ltd",
+   "scope_name": "",
+   "requested_capacity": 180,
+   "documents": [
+    {
+     "document_type": "declaration",
+     "filename": "declaration.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nCertificate No: DECL-9006\n"
+    },
+    {
+     "document_type": "safety_certificate",
+     "filename": "safety.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nCertificate No: SAFE-9006\nValid Until: 2030-12-31\n"
+    },
+    {
+     "document_type": "prior_approval",
+     "filename": "prior.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nReference No: SUB-2025-9006\nApproved Capacity: 60\n"
+    }
+   ],
+   "expected_rules": [
+    "CAPACITY-MATCH-001"
+   ],
+   "forbidden_rules": [
+    "DOCS-REQUIRED-001",
+    "NAME-MATCH-001",
+    "SCOPE-MATCH-001"
+   ]
+  },
+  {
+   "id": "cross-document-contradiction",
+   "description": "Declaration and safety certificate name two different organizations.",
+   "request_type": "licence_renewal",
+   "review_cycle": "2026-27",
+   "organization_name": "Riverside Logistics Ltd",
+   "scope_name": "",
+   "requested_capacity": null,
+   "documents": [
+    {
+     "document_type": "declaration",
+     "filename": "declaration.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nCertificate No: DECL-9007\n"
+    },
+    {
+     "document_type": "safety_certificate",
+     "filename": "safety.txt",
+     "text": "Organization Name: Riverside Logistics Services\nCertificate No: SAFE-9007\nValid Until: 2030-12-31\n"
+    },
+    {
+     "document_type": "prior_approval",
+     "filename": "prior.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nReference No: SUB-2025-9007\n"
+    }
+   ],
+   "expected_rules": [
+    "FIELD-CONFLICT-001",
+    "NAME-MATCH-001"
+   ],
+   "forbidden_rules": [
+    "DOCS-REQUIRED-001",
+    "EXPIRY-001"
+   ]
+  },
+  {
+   "id": "scope-expansion-missing-staff-declaration",
+   "description": "Scope-expansion sample case without its staff declaration document.",
+   "request_type": "scope_expansion",
+   "review_cycle": "2026-27",
+   "organization_name": "Riverside Logistics Ltd",
+   "scope_name": "",
+   "requested_capacity": 60,
+   "documents": [
+    {
+     "document_type": "declaration",
+     "filename": "declaration.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nCertificate No: DECL-9008\n"
+    },
+    {
+     "document_type": "prior_approval",
+     "filename": "prior.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nReference No: SUB-2025-9008\nApproved Capacity: 60\n"
+    }
+   ],
+   "expected_rules": [
+    "DOCS-REQUIRED-001"
+   ],
+   "forbidden_rules": [
+    "NAME-MATCH-001",
+    "CAPACITY-MATCH-001"
+   ]
+  },
+  {
+   "id": "unreadable-pdf-extraction",
+   "description": "Prior approval uploaded as a corrupt PDF: extraction and confidence rules should flag manual review.",
+   "request_type": "licence_renewal",
+   "review_cycle": "2026-27",
+   "organization_name": "Riverside Logistics Ltd",
+   "scope_name": "",
+   "requested_capacity": null,
+   "documents": [
+    {
+     "document_type": "declaration",
+     "filename": "declaration.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nCertificate No: DECL-9009\n"
+    },
+    {
+     "document_type": "safety_certificate",
+     "filename": "safety.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nCertificate No: SAFE-9009\nValid Until: 2030-12-31\n"
+    },
+    {
+     "document_type": "prior_approval",
+     "filename": "broken.pdf",
+     "encoding": "latin-1",
+     "text": "%PDF-1.4\nthis file is not a parseable pdf document\n"
+    }
+   ],
+   "expected_rules": [
+    "EXTRACT-001",
+    "EXTRACT-002"
+   ],
+   "forbidden_rules": [
+    "DOCS-REQUIRED-001",
+    "NAME-MATCH-001"
+   ]
+  },
+  {
+   "id": "new-registration-missing-consent",
+   "description": "New-registration sample case missing its consent letter.",
+   "request_type": "new_registration",
+   "review_cycle": "2026-27",
+   "organization_name": "Riverside Logistics Ltd",
+   "scope_name": "Bulk Storage",
+   "requested_capacity": 60,
+   "documents": [
+    {
+     "document_type": "declaration",
+     "filename": "declaration.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nCertificate No: DECL-9010\n"
+    },
+    {
+     "document_type": "facility_declaration",
+     "filename": "infra.txt",
+     "text": "Organization Name: Riverside Logistics Ltd\nClassrooms and laboratories declared for Bulk Storage with capacity 60.\n"
+    }
+   ],
+   "expected_rules": [
+    "DOCS-REQUIRED-001"
+   ],
+   "forbidden_rules": [
+    "NAME-MATCH-001",
+    "SCOPE-MATCH-001",
+    "CAPACITY-MATCH-001"
+   ]
+  }
+ ]
+}
