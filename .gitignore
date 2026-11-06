@@ -24,6 +24,9 @@ data/models/
 /data/*.log*
 /.eval-out.json
 
+# Local git worktrees used to run the archived prototype alongside this one
+/.worktrees/
+
 # Personal source material and chat attachments — never committed
 /reference/
 /.cloud-attachments/
