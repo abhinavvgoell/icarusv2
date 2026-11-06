@@ -86,6 +86,20 @@ Open <http://127.0.0.1:8000>. On first start Icarus creates `data/prototype.db`
 and seeds three synthetic cases when `APP_BOOTSTRAP_DEMO_DATA=true` (the
 development default).
 
+### Run it from GitHub (Codespaces)
+
+The repository ships a dev container, so it can run in the cloud with no local
+install: open <https://codespaces.new/abhinavvgoell/icarusv2>, wait for the image
+to build, and forwarded port 8000 opens the sign-in page. The container starts
+uvicorn automatically, widens `APP_ALLOWED_HOSTS` to `*.app.github.dev` so the
+forwarded URL is accepted, and seeds the same synthetic demo data.
+
+GitHub Pages cannot host this project: the UI is served by FastAPI and every
+screen after sign-in calls the API, so a static-only host would show a login form
+that cannot authenticate. For a public instance, build the container
+(`docker compose up --build`) and run it on any host that keeps a Python process
+and a writable volume.
+
 Optional extras:
 
 - **Local AI assistance** — `.\\scripts\\download_ai_models.ps1` installs the
