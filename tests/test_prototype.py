@@ -12,7 +12,7 @@ def headers(email, password):
     return {"X-Session-Token": response.json()["token"]}
 
 APPLICANT = headers("submitter@cascade.demo", "Submitter@123")
-OFFICER = headers("reviewer@arbiter.demo", "Reviewer@123")
+OFFICER = headers("reviewer@icarus.demo", "Reviewer@123")
 
 def test_health_and_seeded_findings():
     assert client.get("/api/health").json()["status"] == "ok"
@@ -369,20 +369,20 @@ def test_application_list_returns_rows_for_reviewer_and_submitter():
 def test_reviewer_assignment_records_ownership_and_rejects_non_reviewers():
     roster = client.get("/api/reviewers", headers=OFFICER)
     assert roster.status_code == 200
-    assert any(item["email"] == "reviewer@arbiter.demo" for item in roster.json()["reviewers"])
+    assert any(item["email"] == "reviewer@icarus.demo" for item in roster.json()["reviewers"])
     assert client.get("/api/reviewers", headers=APPLICANT).status_code == 403
-    assigned = client.post("/api/applications/2/assign", headers=OFFICER, json={"reviewer_email": "reviewer@arbiter.demo"})
+    assigned = client.post("/api/applications/2/assign", headers=OFFICER, json={"reviewer_email": "reviewer@icarus.demo"})
     assert assigned.status_code == 200
-    assert assigned.json()["assigned_to"] == "reviewer@arbiter.demo"
+    assert assigned.json()["assigned_to"] == "reviewer@icarus.demo"
     case = client.get("/api/applications/2", headers=OFFICER).json()
-    assert case["assigned_to"] == "reviewer@arbiter.demo"
+    assert case["assigned_to"] == "reviewer@icarus.demo"
     assert any(event["action"] == "case_assigned" for event in case["audit"])
     # Only active reviewer accounts can own a case.
     rejected = client.post("/api/applications/2/assign", headers=OFFICER, json={"reviewer_email": "submitter@cascade.demo"})
     assert rejected.status_code == 400
     cleared = client.post("/api/applications/2/assign", headers=OFFICER, json={"reviewer_email": None})
     assert cleared.status_code == 200 and cleared.json()["assigned_to"] is None
-    assert client.post("/api/applications/2/assign", headers=APPLICANT, json={"reviewer_email": "reviewer@arbiter.demo"}).status_code == 403
+    assert client.post("/api/applications/2/assign", headers=APPLICANT, json={"reviewer_email": "reviewer@icarus.demo"}).status_code == 403
 
 def test_reviewer_assignment_enforces_case_scope_across_lists_alerts_and_direct_routes():
     import app.main as main
@@ -392,7 +392,7 @@ def test_reviewer_assignment_enforces_case_scope_across_lists_alerts_and_direct_
                  ("reviewer.second@aicte.demo", "reviewer", None, main.hash_password("SecondReviewer@123")))
     conn.commit(); conn.close()
     second = headers("reviewer.second@aicte.demo", "SecondReviewer@123")
-    admin = headers("admin@arbiter.demo", "Admin@123")
+    admin = headers("admin@icarus.demo", "Admin@123")
     created = client.post("/api/applications", headers=APPLICANT, json={
         "organization_name": "Saraswati Reviewer Scope Test", "review_cycle": "2026-27",
         "request_type": "licence_renewal",
@@ -405,7 +405,7 @@ def test_reviewer_assignment_enforces_case_scope_across_lists_alerts_and_direct_
     assert client.post(f"/api/applications/{application_id}/assign", headers=OFFICER,
                        json={"reviewer_email": "reviewer.second@aicte.demo"}).status_code == 403
     claimed = client.post(f"/api/applications/{application_id}/assign", headers=OFFICER,
-                          json={"reviewer_email": "reviewer@arbiter.demo"})
+                          json={"reviewer_email": "reviewer@icarus.demo"})
     assert claimed.status_code == 200
 
     client.post(f"/api/applications/{application_id}/precheck", headers=OFFICER)
@@ -442,7 +442,7 @@ def test_escalation_routes_case_for_official_intervention_and_can_be_resolved():
     assert escalated.json()["escalation_level"] == "inspection_required"
     assert escalated.json()["routed_to_alerts"] is True
     case = client.get(f"/api/applications/{application_id}", headers=OFFICER).json()
-    assert case["escalated_at"] and case["escalated_by"] == "reviewer@arbiter.demo"
+    assert case["escalated_at"] and case["escalated_by"] == "reviewer@icarus.demo"
     assert "site visit" in case["escalation_reason"]
     assert any(event["action"] == "escalated" for event in case["audit"])
     alerts = client.get("/api/alerts", headers=OFFICER).json()
@@ -450,7 +450,7 @@ def test_escalation_routes_case_for_official_intervention_and_can_be_resolved():
     assert len(queued) == 1
     assert queued[0]["severity"] == "critical"
     assert "site visit" in queued[0]["explanation"]
-    assert client.post(f"/api/applications/{application_id}/assign", headers=OFFICER, json={"reviewer_email": "reviewer@arbiter.demo"}).status_code == 200
+    assert client.post(f"/api/applications/{application_id}/assign", headers=OFFICER, json={"reviewer_email": "reviewer@icarus.demo"}).status_code == 200
     dashboard = client.get("/api/dashboard", headers=OFFICER).json()
     assert dashboard["escalated_applications"] >= 1 and dashboard["assigned_applications"] >= 1
     resolved = client.post(f"/api/applications/{application_id}/escalation/resolve", headers=OFFICER)
@@ -576,6 +576,9 @@ def test_ai_unavailable_upload_is_routed_to_manual_review(monkeypatch):
         "status": "manual_review", "suggested_type": None, "similarity": None,
         "fields": [], "detail": "Local AI unavailable; manual review required.", "model": None,
     })
+    # Pin the deployment state so the test does not depend on whether the optional
+    # model assets happen to be installed on the machine running the suite.
+    monkeypatch.setattr(main.ai, "assistance_attempted", lambda: False)
     uploaded = client.post(
         "/api/applications/2/documents?document_type=safety_certificate",
         headers=APPLICANT,
@@ -700,7 +703,7 @@ def test_reviewer_rule_metadata_is_attached_to_findings():
     client.post("/api/applications/2/precheck", headers=OFFICER)
     findings = client.get("/api/applications/2", headers=OFFICER).json()["findings"]
     finding = next(item for item in findings if item["rule_id"] == "NAME-MATCH-001" and item["status"] == "open")
-    assert finding["source_version"] == "Pack 1.0.0"
+    assert finding["source_version"] == "Pack 2.0.0"
     assert finding["authoritative"] is False
     assert "Source page: 1" in finding["evidence"]
 
@@ -771,7 +774,7 @@ def test_demo_findings_do_not_block_submitter_submission_to_reviewer():
     assert response.json()["finding_count"] >= 1
 
 def test_scoped_rule_pack_draft_requires_independent_approval_and_applies_immutable_snapshot():
-    admin_a = headers("admin@arbiter.demo", "Admin@123")
+    admin_a = headers("admin@icarus.demo", "Admin@123")
     draft = client.post("/api/rule-packs/drafts", headers=admin_a, json={
         "changes": [{"rule_id": "NAME-MATCH-001", "enabled": False}],
         "reason": "Disable this illustrative check for the selected demo year.",
@@ -782,7 +785,7 @@ def test_scoped_rule_pack_draft_requires_independent_approval_and_applies_immuta
     assert draft.status_code == 200
     version_id = draft.json()["id"]
     assert client.post(f"/api/rule-packs/{version_id}/publish", headers=admin_a).status_code == 403
-    admin_b = headers("reviewer@arbiter.demo", "Reviewer@123")
+    admin_b = headers("reviewer@icarus.demo", "Reviewer@123")
     assert client.post(f"/api/rule-packs/{version_id}/publish", headers=admin_b).status_code == 403
     # Independent approval is restricted to an admin; provision a second local admin for the test.
     admin_two_email = "second-admin@test.demo"
@@ -854,7 +857,7 @@ def test_rectification_gate_and_replacement_are_audited():
     assert any(event["action"] == "document_replaced" for event in case["audit"])
 
 def test_unauthenticated_demo_role_header_is_rejected():
-    response = client.get("/api/applications", headers={"X-Demo-User": "reviewer@arbiter.demo"})
+    response = client.get("/api/applications", headers={"X-Demo-User": "reviewer@icarus.demo"})
     assert response.status_code == 401
 
 def test_browser_security_headers_are_present():
@@ -937,11 +940,11 @@ def test_s3_storage_uses_kms_and_closes_download_streams(monkeypatch):
 
     fake = FakeS3()
     monkeypatch.setattr(boto3, "client", lambda *args, **kwargs: fake)
-    storage = S3Storage("private-bucket", "arbiter", "ap-south-1", None, "AWS:KMS", "key-id")
+    storage = S3Storage("private-bucket", "icarus", "ap-south-1", None, "AWS:KMS", "key-id")
     storage.initialize()
     storage.put("document.bin", b"data")
     assert storage.exists("document.bin")
-    assert fake.put_options["Key"] == "arbiter/document.bin"
+    assert fake.put_options["Key"] == "icarus/document.bin"
     assert fake.put_options["ServerSideEncryption"] == "aws:kms"
     assert fake.put_options["SSEKMSKeyId"] == "key-id"
     assert fake.put_options["IfNoneMatch"] == "*"
@@ -1043,7 +1046,7 @@ def test_sqlite_migration_requires_postgres_target_and_upload_root(tmp_path, mon
         migrate(tmp_path / "missing.db", tmp_path / "uploads")
 
 def test_local_admin_cannot_assign_an_oidc_subject():
-    admin = headers("admin@arbiter.demo", "Admin@123")
+    admin = headers("admin@icarus.demo", "Admin@123")
     response = client.post("/api/admin/users", headers=admin, json={
         "email": "new.user@example.edu", "role": "reviewer",
         "initial_password": "Initial-Secret-123", "oidc_subject": "provider-subject-123",
@@ -1072,22 +1075,22 @@ def test_production_configuration_requires_real_external_services(monkeypatch):
 
     ready = {
         "APP_BOOTSTRAP_DEMO_DATA": "false",
-        "APP_DATABASE_URL": "postgresql://arbiter:secret@db.example.edu/arbiter",
+        "APP_DATABASE_URL": "postgresql://icarus:secret@db.example.edu/icarus",
         "APP_STORAGE_BACKEND": "s3",
-        "APP_S3_BUCKET": "arbiter-private",
+        "APP_S3_BUCKET": "icarus-private",
         "APP_S3_REGION": "ap-south-1",
         "APP_S3_ENCRYPTION": "aws:kms",
         "APP_S3_KMS_KEY_ID": "arn:aws:kms:ap-south-1:123456789012:key/test",
         "APP_AUTH_MODE": "oidc",
         "APP_OIDC_ISSUER": "https://identity.example.edu",
-        "APP_OIDC_CLIENT_ID": "arbiter",
+        "APP_OIDC_CLIENT_ID": "icarus",
         "APP_OIDC_CLIENT_SECRET": "provider-secret",
         "APP_OIDC_ALLOWED_DOMAINS": "example.edu",
         "APP_SESSION_COOKIE_SECRET": "s" * 64,
         "APP_MALWARE_SCAN_MODE": "clamav",
         "APP_CLAMAV_HOST": "clamav.internal",
-        "APP_ALLOWED_HOSTS": "arbiter.example.edu",
-        "APP_ALLOWED_ORIGINS": "https://arbiter.example.edu",
+        "APP_ALLOWED_HOSTS": "icarus.example.edu",
+        "APP_ALLOWED_ORIGINS": "https://icarus.example.edu",
     }
     monkeypatch.setitem(main.RULE_PACK, "provisional", False)
     assert production_configuration_errors(ready) == []
@@ -1213,7 +1216,7 @@ def test_clamav_scan_fails_closed_on_unterminated_reply(monkeypatch):
 def test_operational_readiness_and_audit_policy_are_available_to_admin():
     assert client.get("/api/health/live").json()["status"] == "live"
     assert client.get("/api/health/ready").json()["status"] == "ready"
-    admin = headers("admin@arbiter.demo", "Admin@123")
+    admin = headers("admin@icarus.demo", "Admin@123")
     policy = client.get("/api/operations/audit-retention", headers=admin).json()
     assert policy["automatic_deletion"] is False
     assert policy["retention_days"] == 2555
@@ -1222,7 +1225,7 @@ def test_operational_readiness_and_audit_policy_are_available_to_admin():
 
 def test_local_identity_mode_and_admin_directory_are_available():
     assert client.get("/api/auth/mode").json()["mode"] == "local"
-    admin = headers("admin@arbiter.demo", "Admin@123")
+    admin = headers("admin@icarus.demo", "Admin@123")
     users = client.get("/api/admin/users", headers=admin).json()
     assert any(user["email"] == "submitter@northwind.demo" and user["active"] for user in users)
 
@@ -1234,7 +1237,7 @@ def test_document_replacement_preserves_a_version_history_and_audit_chain():
     assert response.status_code == 200
     versions = client.get(f"/api/documents/{response.json()['document_id']}/versions", headers=APPLICANT).json()
     assert any(version["id"] == current["id"] for version in versions)
-    admin = headers("admin@arbiter.demo", "Admin@123")
+    admin = headers("admin@icarus.demo", "Admin@123")
     verification = client.get("/api/applications/2/audit/verify", headers=admin).json()
     assert verification["valid"] is True
 

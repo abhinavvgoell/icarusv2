@@ -64,7 +64,7 @@ def run() -> int:
     if dataset.get("synthetic") is not True or not dataset.get("cases"):
         raise SystemExit("Refusing evaluation: dataset is not explicitly marked synthetic")
 
-    with tempfile.TemporaryDirectory(prefix="arbiter-rule-eval-") as tmp:
+    with tempfile.TemporaryDirectory(prefix="icarus-rule-eval-") as tmp:
         tmp_path = Path(tmp)
         import os
         os.environ["APP_DATABASE_PATH"] = str(tmp_path / "evaluation.db")
@@ -77,7 +77,7 @@ def run() -> int:
         client = TestClient(app)
         login = lambda email, password: {"X-Session-Token": client.post("/api/auth/login", json={"email": email, "password": password}).json()["token"]}
         submitter = login("submitter@cascade.demo", "Submitter@123")
-        reviewer = login("reviewer@arbiter.demo", "Reviewer@123")
+        reviewer = login("reviewer@icarus.demo", "Reviewer@123")
 
         results = []
         for case in dataset["cases"]:

@@ -12,13 +12,13 @@ The checked-in dataset, `docs/demo_data/ai_extraction_benchmark.json`, contains 
 
 On the pinned local models bundled with this prototype:
 
-| Extractor | Exact value and page | Precision | Recall | F1 |
-| --- | ---: | ---: | ---: | ---: |
-| Deterministic patterns | 26 / 29 | 0.9630 | 0.8966 | 0.9286 |
-| Local transformer only | 20 / 29 | 0.8000 | 0.6897 | 0.7407 |
-| Pattern + local transformer | 29 / 30 | 0.9667 | 1.0000 | 0.9831 |
+| Extractor | Predictions | Exact value and page | Precision | Recall | F1 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Deterministic patterns | 29 | 29 / 29 | 1.0000 | 1.0000 | 1.0000 |
+| Local transformer only | 26 | 16 / 29 | 0.6154 | 0.5517 | 0.5818 |
+| Pattern + local transformer | 29 | 29 / 29 | 1.0000 | 1.0000 | 1.0000 |
 
-Results were refreshed on 28 October 2026 using the pinned local models: the hybrid made 30 predictions for 29 expected fields, so one prediction was extra/incorrect despite all 29 expected field/page pairs being recovered. The local classifier labelled all 10 synthetic examples correctly. This tiny, hand-authored set is a functional smoke evaluation, not a representative accuracy claim. It does not cover handwriting, real scans, non-English OCR, authentic third-party submissions, demographic bias, or adversarial documents. Real-world use requires a separately labelled and approved evaluation set.
+Results were refreshed on 6 November 2026 with the pinned local models installed. The dataset's field layout is close to the deterministic templates, so the pattern row measures the templates rather than general accuracy; the local transformer alone is markedly weaker here and its suggestions only fill fields the patterns miss. The local classifier labelled 9 of the 10 synthetic examples with the expected document type. This tiny, hand-authored set is a functional smoke evaluation, not a representative accuracy claim. It does not cover handwriting, real scans, non-English OCR, authentic third-party submissions, demographic bias, or adversarial documents. Real-world use requires a separately labelled and approved evaluation set.
 
 The optional LLM comparison is intentionally not run by default. To send this synthetic dataset's extracted text to the configured external provider, set `APP_AI_PROVIDER=openai`, `APP_LLM_MODEL`, and `OPENAI_API_KEY`, then explicitly run:
 

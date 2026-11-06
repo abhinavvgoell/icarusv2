@@ -1,5 +1,5 @@
 {
- "dataset_id": "arbiter-synthetic-extraction-v1",
+ "dataset_id": "icarus-synthetic-extraction-v1",
  "synthetic": true,
  "description": "Hand-authored sample documents for an advisory extraction smoke evaluation. They are not representative of real third-party submissions.",
  "cases": [

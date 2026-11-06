@@ -1,4 +1,4 @@
-"""Small compatibility layer while Arbiter transitions from SQLite to PostgreSQL."""
+"""Small compatibility layer while Icarus transitions from SQLite to PostgreSQL."""
 from __future__ import annotations
 
 import os

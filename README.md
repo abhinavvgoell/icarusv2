@@ -1,9 +1,9 @@
-# Arbiter
+# Icarus v2
 
 **Document compliance review with evidence-linked findings.**
 
-Arbiter is a small, self-hosted review workspace for teams that check submitted
-document bundles. A submitter files a case and uploads documents; Arbiter
+Icarus v2 is a small, self-hosted review workspace for teams that check submitted
+document bundles. A submitter files a case and uploads documents; Icarus
 extracts the fields it can read, runs a versioned set of deterministic checks,
 and turns every disagreement into a finding that points at the exact document,
 page and quoted line that produced it. A human reviewer then accepts, rejects or
@@ -57,7 +57,7 @@ bundled rule pack is an example configuration, not policy advice.
 | Finding | One rule outcome with severity, evidence and a status (`open`, `accepted`, `dismissed`, `rectification_required`). |
 | Rule pack | An immutable published set of enabled rules with applicability metadata. |
 
-## Bundled checks (pack `ARBITER-DEFAULT` v1.0.0)
+## Bundled checks (pack `ICARUS-DEFAULT` v2.0.0)
 
 | Rule | What it flags |
 | --- | --- |
@@ -82,7 +82,7 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8000
 ```
 
-Open <http://127.0.0.1:8000>. On first start Arbiter creates `data/prototype.db`
+Open <http://127.0.0.1:8000>. On first start Icarus creates `data/prototype.db`
 and seeds three synthetic cases when `APP_BOOTSTRAP_DEMO_DATA=true` (the
 development default).
 
@@ -101,8 +101,8 @@ Optional extras:
 | --- | --- | --- |
 | Submitter (Northwind Logistics Ltd) | `submitter@northwind.demo` | `Submitter@123` |
 | Submitter (Cascade Chemicals Ltd) | `submitter@cascade.demo` | `Submitter@123` |
-| Reviewer | `reviewer@arbiter.demo` | `Reviewer@123` |
-| Administrator | `admin@arbiter.demo` | `Admin@123` |
+| Reviewer | `reviewer@icarus.demo` | `Reviewer@123` |
+| Administrator | `admin@icarus.demo` | `Admin@123` |
 
 All demo data is fictional. Do not upload real personal or commercial documents
 into the default development environment.
@@ -157,8 +157,9 @@ Design notes worth knowing:
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 
-Current state: **69 passed, 3 skipped**. The skips are the on-device model
-acceptance tests, which need `scripts/download_ai_models.ps1` first.
+Current state: **72 passed** with the optional models installed, or **69 passed,
+3 skipped** without them — the skips are the on-device model acceptance tests,
+which need `scripts/download_ai_models.ps1` first.
 
 Two harnesses measure the parts that are easy to get quietly wrong:
 
@@ -208,7 +209,7 @@ with `APP_ENV=production` and a short or missing secret.
 - **No forensics.** Duplicate detection is exact-hash only. There is no image or
   metadata tampering analysis, and no computer-vision review of facility media —
   a person reviews that evidence and the outcome is recorded.
-- **Example policy.** `ARBITER-DEFAULT` is a generic sample pack. Real use needs
+- **Example policy.** `ICARUS-DEFAULT` is a generic sample pack. Real use needs
   your own sources, clauses and an approved pack.
 - **Demo authentication.** Local password login is for development; use the OIDC
   path with a real identity provider for anything shared.

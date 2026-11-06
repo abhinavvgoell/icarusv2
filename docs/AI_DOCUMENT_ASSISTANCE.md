@@ -1,6 +1,6 @@
 # Local AI document assistance
 
-Arbiter now uses local ONNX transformer models for two advisory tasks:
+Icarus now uses local ONNX transformer models for two advisory tasks:
 
 - semantic similarity ranks a submitted document against the demo document types;
 - extractive question answering suggests organization name, certificate/reference number, and explicit validity date, with the original page and model score.
@@ -24,7 +24,7 @@ The runtime dependencies (`onnxruntime` and `tokenizers`) are included in `requi
 
 Then start or restart the local app. `APP_AI_ENABLED` defaults to true; set it to `false` to disable inference. If assets or dependencies are missing, uploads still work and the app explicitly marks AI assistance unavailable and leaves the record for manual review. `/api/ai/status` reports whether models are installed and confirms `external_processing: false`.
 
-The model downloads total about 110 MB and are stored in `data/models/arbiter-ai`, outside public static storage and excluded from Docker build context. The downloader pins repository revisions and checks SHA-256 hashes for all four files. Inference uses CPU ONNX Runtime on the same machine; application documents are not sent to Hugging Face or another service. Hugging Face is contacted only by the one-time model setup script.
+The model downloads total about 110 MB and are stored in `data/models/icarus-ai`, outside public static storage and excluded from Docker build context. The downloader pins repository revisions and checks SHA-256 hashes for all four files. Inference uses CPU ONNX Runtime on the same machine; application documents are not sent to Hugging Face or another service. Hugging Face is contacted only by the one-time model setup script.
 
 ## Model provenance
 

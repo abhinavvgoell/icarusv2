@@ -2,11 +2,11 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: arbiter
-      POSTGRES_USER: arbiter
-      POSTGRES_PASSWORD: arbiter-staging-only
+      POSTGRES_DB: icarus
+      POSTGRES_USER: icarus
+      POSTGRES_PASSWORD: icarus-staging-only
     volumes:
-      - arbiter-staging-postgres:/var/lib/postgresql/data
+      - icarus-staging-postgres:/var/lib/postgresql/data
       - ./infra/postgres/001_initial.sql:/docker-entrypoint-initdb.d/001_initial.sql:ro
       - ./infra/postgres/002_shared_login_throttling.sql:/docker-entrypoint-initdb.d/002_shared_login_throttling.sql:ro
       - ./infra/postgres/003_ai_document_assistance.sql:/docker-entrypoint-initdb.d/003_ai_document_assistance.sql:ro
@@ -15,7 +15,7 @@ services:
       - ./infra/postgres/006_rule_pack_versions.sql:/docker-entrypoint-initdb.d/006_rule_pack_versions.sql:ro
       - ./infra/postgres/007_facility_reviews.sql:/docker-entrypoint-initdb.d/007_facility_reviews.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U arbiter -d arbiter"]
+      test: ["CMD-SHELL", "pg_isready -U icarus -d icarus"]
       interval: 5s
       timeout: 3s
       retries: 20
@@ -24,7 +24,7 @@ services:
   clamav:
     image: clamav/clamav:stable
     volumes:
-      - arbiter-staging-clamav:/var/lib/clamav
+      - icarus-staging-clamav:/var/lib/clamav
     healthcheck:
       test: ["CMD-SHELL", "[ \"$(echo PING | nc localhost 3310)\" = PONG ]"]
       interval: 10s
@@ -33,7 +33,7 @@ services:
       start_period: 2m
     restart: unless-stopped
 
-  arbiter:
+  icarus:
     build: .
     ports:
       - "127.0.0.1:${APP_STAGING_PORT:-8002}:8000"
@@ -41,10 +41,10 @@ services:
       APP_ENV: development
       APP_AUTH_MODE: local
       APP_SESSION_COOKIE_SECRET: staging-only-session-secret-not-for-production-000000000000
-      APP_DATABASE_URL: postgresql://arbiter:arbiter-staging-only@postgres:5432/arbiter
+      APP_DATABASE_URL: postgresql://icarus:icarus-staging-only@postgres:5432/icarus
       APP_BOOTSTRAP_DEMO_DATA: "true"
-      APP_UPLOAD_DIR: /var/lib/arbiter/uploads
-      APP_AI_MODEL_DIR: /var/lib/arbiter/models/arbiter-ai
+      APP_UPLOAD_DIR: /var/lib/icarus/uploads
+      APP_AI_MODEL_DIR: /var/lib/icarus/models/icarus-ai
       APP_STORAGE_BACKEND: local
       APP_MALWARE_SCAN_MODE: clamav
       APP_CLAMAV_HOST: clamav
@@ -52,8 +52,8 @@ services:
       APP_ALLOWED_HOSTS: localhost,127.0.0.1,testserver
       APP_ALLOWED_ORIGINS: http://localhost:${APP_STAGING_PORT:-8002},http://127.0.0.1:${APP_STAGING_PORT:-8002}
     volumes:
-      - arbiter-staging-uploads:/var/lib/arbiter/uploads
-      - ./data/models/arbiter-ai:/var/lib/arbiter/models/arbiter-ai:ro
+      - icarus-staging-uploads:/var/lib/icarus/uploads
+      - ./data/models/icarus-ai:/var/lib/icarus/models/icarus-ai:ro
     depends_on:
       postgres:
         condition: service_healthy
@@ -68,6 +68,6 @@ services:
     restart: unless-stopped
 
 volumes:
-  arbiter-staging-postgres:
-  arbiter-staging-clamav:
-  arbiter-staging-uploads:
+  icarus-staging-postgres:
+  icarus-staging-clamav:
+  icarus-staging-uploads:

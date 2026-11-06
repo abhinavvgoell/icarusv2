@@ -1,6 +1,6 @@
 # Demo guide
 
-A 10–15 minute walkthrough of everything Arbiter does, using only the synthetic
+A 10–15 minute walkthrough of everything Icarus does, using only the synthetic
 data the application seeds itself. No external services are contacted at any
 point.
 
@@ -16,10 +16,10 @@ again — the seed only runs against an empty database.
 
 | Login | Password | Role |
 | --- | --- | --- |
-| `reviewer@arbiter.demo` | `Reviewer@123` | Reviewer |
+| `reviewer@icarus.demo` | `Reviewer@123` | Reviewer |
 | `submitter@northwind.demo` | `Submitter@123` | Submitter, Northwind Logistics Ltd |
 | `submitter@cascade.demo` | `Submitter@123` | Submitter, Cascade Chemicals Ltd |
-| `admin@arbiter.demo` | `Admin@123` | Administrator |
+| `admin@icarus.demo` | `Admin@123` | Administrator |
 
 ## What is seeded
 
@@ -94,7 +94,7 @@ Nothing here contacts an external register. Read
 
 ## 7. Rules & policies
 
-**Rules & policies** shows the effective pack (`ARBITER-DEFAULT` v1.0.0) and every
+**Rules & policies** shows the effective pack (`ICARUS-DEFAULT` v2.0.0) and every
 rule with its source, clause, status and applicability. Note the wording: the
 source is an example pack, not a citation, and the approval status says the pack
 is configuration.

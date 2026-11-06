@@ -1,13 +1,13 @@
 services:
-  arbiter:
+  icarus:
     build: .
     ports:
       - "8000:8000"
     env_file:
       - .env
     volumes:
-      - arbiter-data:/var/lib/arbiter
+      - icarus-data:/var/lib/icarus
     restart: unless-stopped
 
 volumes:
-  arbiter-data:
+  icarus-data:

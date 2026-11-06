@@ -87,7 +87,7 @@ class OpenAIResponsesExtractor:
                 "Return no field when the value or exact quote is unclear. This is extraction only; do not assess compliance."
             ),
             "input": self._page_input(pages),
-            "text": {"format": {"type": "json_schema", "name": "arbiter_document_fields", "strict": True,
+            "text": {"format": {"type": "json_schema", "name": "icarus_document_fields", "strict": True,
                                "schema": self._schema()}},
         }
         response = self._post(payload)

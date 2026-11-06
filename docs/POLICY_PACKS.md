@@ -11,10 +11,10 @@ the pack, not in the check code.
 
 ```python
 RULE_PACK = {
-    "id": "ARBITER-DEFAULT",
-    "version": "1.0.0",
+    "id": "ICARUS-DEFAULT",
+    "version": "2.0.0",
     "label": "Default example policy pack",
-    "source": "Example policy pack bundled with Arbiter",
+    "source": "Example policy pack bundled with Icarus",
     "provisional": False,
     "authoritative": False,
     "review_cycles": ["2024-25", "2025-26", "2026-27"],
@@ -41,9 +41,9 @@ Checks are grouped by request type in `CHECKLIST`, which is what
 
 ## The bundled pack
 
-`ARBITER-DEFAULT` v1.0.0 ships nine executable checks plus two reference-only
+`ICARUS-DEFAULT` v2.0.0 ships nine executable checks plus two reference-only
 entries. Nothing in it is a quotation from a real instrument; the source fields
-say so explicitly ("Arbiter example policy pack (not a real citation)") so a
+say so explicitly ("Icarus example policy pack (not a real citation)") so a
 reader can never mistake configuration for a citation.
 
 | Rule | Logic |

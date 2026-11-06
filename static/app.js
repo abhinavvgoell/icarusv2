@@ -1,12 +1,12 @@
 /* ==========================================================================
-   ARBITER — document compliance review
+   ICARUS — document compliance review
    Vanilla-JS single-page client (no build step)
    ========================================================================== */
 
 const $ = s => document.querySelector(s);
 const esc = v => String(v ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 
-let token = localStorage.getItem('arbiter_token') || '';
+let token = localStorage.getItem('icarus_token') || '';
 let me = null;
 let apps = [];
 let selectedApp = null;
@@ -121,7 +121,7 @@ async function quickLogin(email, password) {
       body: JSON.stringify({ email, password })
     });
     token = res.token;
-    localStorage.setItem('arbiter_token', token);
+    localStorage.setItem('icarus_token', token);
     await start();
   } catch (err) {
     toast(err.message || 'Login failed');
@@ -134,16 +134,16 @@ function loginView() {
       <div class="login-box">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
           <div class="brand pill" style="display:inline-flex;padding:6px 14px 6px 6px">
-            <i>AR</i>Arbiter
+            <i>IC</i>Icarus v2
           </div>
-          <span class="tag">v1.0 · self-hosted</span>
+          <span class="tag">v2.0 · self-hosted</span>
         </div>
         <h1>Document compliance review</h1>
         <p>Extract fields, run your policy pack, and keep a human in the loop with an auditable trail.</p>
         <form id="loginForm">
           <div class="form-row">
             <label>Email address</label>
-            <input type="email" name="email" placeholder="reviewer@arbiter.demo" required>
+            <input type="email" name="email" placeholder="reviewer@icarus.demo" required>
           </div>
           <div class="form-row">
             <label>Password</label>
@@ -156,8 +156,8 @@ function loginView() {
           <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
             <button type="button" class="btn alt s" style="text-align:left;width:100%" onclick="quickLogin('submitter@northwind.demo','Submitter@123')">Submitter — Northwind (clean case)</button>
             <button type="button" class="btn alt s" style="text-align:left;width:100%" onclick="quickLogin('submitter@cascade.demo','Submitter@123')">Submitter — Cascade (deficient case)</button>
-            <button type="button" class="btn p s" style="text-align:left;width:100%" onclick="quickLogin('reviewer@arbiter.demo','Reviewer@123')">Reviewer queue</button>
-            <button type="button" class="btn o s" style="text-align:left;width:100%" onclick="quickLogin('admin@arbiter.demo','Admin@123')">Administrator</button>
+            <button type="button" class="btn p s" style="text-align:left;width:100%" onclick="quickLogin('reviewer@icarus.demo','Reviewer@123')">Reviewer queue</button>
+            <button type="button" class="btn o s" style="text-align:left;width:100%" onclick="quickLogin('admin@icarus.demo','Admin@123')">Administrator</button>
           </div>
         </div>
       </div>
@@ -173,7 +173,7 @@ function loginView() {
         body: JSON.stringify(Object.fromEntries(fd))
       });
       token = res.token;
-      localStorage.setItem('arbiter_token', token);
+      localStorage.setItem('icarus_token', token);
       await start();
     } catch (err) {
       toast(err.message);
@@ -187,7 +187,7 @@ async function start() {
     me = s.user;
   } catch (err) {
     token = '';
-    localStorage.removeItem('arbiter_token');
+    localStorage.removeItem('icarus_token');
     loginView();
     return;
   }
@@ -205,7 +205,7 @@ async function start() {
 async function logout() {
   try { await api('/api/auth/logout', { method: 'POST' }); } catch {}
   token = '';
-  localStorage.removeItem('arbiter_token');
+  localStorage.removeItem('icarus_token');
   loginView();
 }
 
@@ -226,7 +226,7 @@ function renderAppShell() {
   const roleTitle = me.role === 'reviewer' ? 'Reviewer' : me.role === 'admin' ? 'Administrator' : 'Submitter';
   $('#app').innerHTML = `
     <header class="tb">
-      <div class="pill brand"><i>AR</i>Arbiter <span style="font-size:11px;color:var(--mu);font-weight:400;margin-left:2px">| Review desk</span></div>
+      <div class="pill brand"><i>IC</i>Icarus v2 <span style="font-size:11px;color:var(--mu);font-weight:400;margin-left:2px">| Review desk</span></div>
       <nav class="pill tn" id="nav" aria-label="Main"></nav>
       <div class="pill tr">
         <button class="ib" data-a="srch" aria-label="Search" id="i1">${ic(I.sea)}</button>
@@ -495,9 +495,9 @@ async function renderVerify() {
       <div class="record-sheet">
         <div class="record-header">
           <div class="record-emblem-wrap">
-            <div class="record-emblem">AR</div>
+            <div class="record-emblem">IC</div>
             <div class="record-titles">
-              <b>ARBITER · DOCUMENT REVIEW RECORD</b>
+              <b>ICARUS · DOCUMENT REVIEW RECORD</b>
               <small>EXTRACTED TEXT, EVIDENCE LOCATIONS & INTEGRITY DIGEST</small>
             </div>
           </div>
@@ -525,7 +525,7 @@ async function renderVerify() {
         <div class="record-body">${highlightedBody || 'Document content could not be displayed.'}</div>
 
         <div class="record-footer-bar">
-          <span class="sm mu">Page ${currentDocPage} of ${docTotalPages} · Extracted by Arbiter · advisory record</span>
+          <span class="sm mu">Page ${currentDocPage} of ${docTotalPages} · Extracted by Icarus · advisory record</span>
           <span class="page-nav"><button class="btn s alt" data-a="docPage" data-v="-1" ${currentDocPage <= 1 ? 'disabled' : ''}>Previous</button><button class="btn s alt" data-a="docPage" data-v="1" ${currentDocPage >= docTotalPages ? 'disabled' : ''}>Next</button></span>
           <div class="acts">
             <a href="/api/documents/${currentDoc.id}/download" class="btn s alt" target="_blank">Download original</a>
@@ -798,7 +798,7 @@ async function recordVerification() {
     <div class="form-row"><label>Value declared in application</label><input id="verDeclared" maxlength="300" placeholder="Required for verified / mismatch / expired"></div>
     <div class="form-row"><label>Value returned by source</label><input id="verReturned" maxlength="300" placeholder="Required for verified / mismatch / expired"></div>
     <div class="form-row"><label>Reviewer detail / observation</label><textarea id="verDetail" minlength="3" maxlength="500" placeholder="What was checked, and what remains to be confirmed"></textarea></div>
-    <p class="sm mu">Manual entries are reviewer-reported; Arbiter does not authenticate the source. Comparison statuses require both values. Inconclusive or unavailable results are routed for human confirmation.</p>`, async () => {
+    <p class="sm mu">Manual entries are reviewer-reported; Icarus does not authenticate the source. Comparison statuses require both values. Inconclusive or unavailable results are routed for human confirmation.</p>`, async () => {
     const payload = {
       document_id: $('#verDocument').value ? Number($('#verDocument').value) : null,
       method: $('#verMethod').value.trim(),
@@ -958,11 +958,11 @@ async function exportData(kind) {
       filename = `${selectedApp.reference}-decision-support.json`; content = JSON.stringify(report, null, 2); mime = 'application/json';
     } else if (kind === 'dashboard') {
       const [dashboard, reportData, alertData, rules] = await Promise.all([api('/api/dashboard'), api('/api/applications'), api('/api/alerts'), api('/api/rules')]);
-      filename = 'arbiter-dashboard-summary.json'; content = JSON.stringify({ report_type: 'Arbiter dashboard decision-support summary', generated_at: new Date().toISOString(), scope: 'Current signed-in user permissions; sample data', dashboard, applications: reportData, open_alerts: alertData.items, rule_pack: rules.rule_pack, disclaimer: 'Sample data; advisory only, not an approval decision.' }, null, 2); mime = 'application/json';
+      filename = 'icarus-dashboard-summary.json'; content = JSON.stringify({ report_type: 'Icarus dashboard decision-support summary', generated_at: new Date().toISOString(), scope: 'Current signed-in user permissions; sample data', dashboard, applications: reportData, open_alerts: alertData.items, rule_pack: rules.rule_pack, disclaimer: 'Sample data; advisory only, not an approval decision.' }, null, 2); mime = 'application/json';
     } else {
       const rows = apps.map(a => ({ reference: a.reference, organization: a.organization_name, review_cycle: a.review_cycle, request_type: a.request_type_label || a.request_type, status: a.status, checks_run: a.checks_run, rule_pack_version: a.rule_pack_version, open_findings: a.open_findings_count || 0, high_risk_findings: a.high_risk_count || 0, document_count: a.document_count || 0 }));          const keys = rows.length ? Object.keys(rows[0]) : ['reference','organization','review_cycle','request_type','status','checks_run','rule_pack_version','open_findings','high_risk_findings','document_count'];
           const cell = value => { let text = String(value ?? ''); if (/^[\s\u0000-\u001f]*[=+@\-]/.test(text)) text = `'${text}`; return `"${text.replace(/"/g, '""')}"`; };
-      filename = 'arbiter-application-list.csv'; content = [keys.map(cell).join(','), ...rows.map(row => keys.map(key => cell(row[key])).join(','))].join('\r\n'); mime = 'text/csv;charset=utf-8';
+      filename = 'icarus-application-list.csv'; content = [keys.map(cell).join(','), ...rows.map(row => keys.map(key => cell(row[key])).join(','))].join('\r\n'); mime = 'text/csv;charset=utf-8';
     }
     const url = URL.createObjectURL(new Blob([content], { type: mime }));
     const link = document.createElement('a'); link.href = url; link.download = filename; link.click();
@@ -1090,7 +1090,7 @@ async function draw() {
     main.innerHTML = await V[k]();
     wireFormEvents();
   }
-  document.title = (R[k] ? R[k][0] : 'Overview') + ' · Arbiter';
+  document.title = (R[k] ? R[k][0] : 'Overview') + ' · Icarus v2';
 }
 
 function wireFormEvents() {

@@ -1,6 +1,6 @@
 # Observability and audit operations
 
-Arbiter writes JSON request-completion events to standard output. Every response includes `X-Request-ID`; callers may submit a safe `X-Request-ID` value to correlate their own logs. Do not log passwords, session tokens, uploaded document contents, or personally identifying data outside the regulated audit store.
+Icarus writes JSON request-completion events to standard output. Every response includes `X-Request-ID`; callers may submit a safe `X-Request-ID` value to correlate their own logs. Do not log passwords, session tokens, uploaded document contents, or personally identifying data outside the regulated audit store.
 
 Health endpoints:
 

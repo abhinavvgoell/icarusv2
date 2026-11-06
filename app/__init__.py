@@ -1,2 +1,2 @@
-"""Arbiter — a self-hostable document compliance review platform."""
+"""Icarus — a self-hostable document compliance review platform."""
 

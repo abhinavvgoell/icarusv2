@@ -1,4 +1,4 @@
-"""One-time, guarded migration of an Arbiter SQLite database to PostgreSQL.
+"""One-time, guarded migration of an Icarus SQLite database to PostgreSQL.
 
 Set APP_DATABASE_URL, APP_STORAGE_BACKEND, and APP_UPLOAD_DIR in the process
 environment. For production, configure the S3/KMS variables as well. This

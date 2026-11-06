@@ -1,4 +1,4 @@
-# Arbiter documentation
+# Icarus documentation
 
 Start with the [project README](../README.md) for the product overview and quick
 start. Everything below goes one level deeper.

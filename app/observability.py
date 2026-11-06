@@ -25,7 +25,7 @@ class JsonFormatter(logging.Formatter):
 
 
 def configure_logging() -> logging.Logger:
-    logger = logging.getLogger("arbiter")
+    logger = logging.getLogger("icarus")
     if logger.handlers: return logger
     handler = logging.StreamHandler()
     handler.setFormatter(JsonFormatter())

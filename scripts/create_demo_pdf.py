@@ -1,6 +1,6 @@
 """
 create_demo_pdf.py - Scratch script to generate a synthetic multi-page PDF for the
-Arbiter OCR / Tesseract pipeline demo.
+Icarus OCR / Tesseract pipeline demo.
 
 Usage:
     .venv\\Scripts\\python.exe scripts\\create_demo_pdf.py
@@ -41,7 +41,7 @@ def add_cover_page(doc: pymupdf.Document) -> None:
     title_font = pymupdf.Font("helv")
     body_font  = pymupdf.Font("helv")
 
-    tw.append((72, 120), "Arbiter - Sample Application File", font=title_font, fontsize=18)
+    tw.append((72, 120), "Icarus - Sample Application File", font=title_font, fontsize=18)
     tw.append((72, 160), "Synthetic demo document - not a real record", font=body_font, fontsize=12)
     tw.append((72, 200), f"Generated: {datetime.date.today().isoformat()}", font=body_font, fontsize=11)
     tw.append((72, 240), "Organization: Northwind Logistics Ltd", font=body_font, fontsize=11)

@@ -1,4 +1,4 @@
-"""Private document-storage backends for Arbiter."""
+"""Private document-storage backends for Icarus."""
 from __future__ import annotations
 
 import os
@@ -90,5 +90,5 @@ class S3Storage:
 def make_storage(local_root: Path):
     backend = os.getenv("APP_STORAGE_BACKEND", "local").lower()
     if backend == "local": return LocalStorage(local_root)
-    if backend == "s3": return S3Storage(os.getenv("APP_S3_BUCKET", ""), os.getenv("APP_S3_PREFIX", "arbiter"), os.getenv("APP_S3_REGION"), os.getenv("APP_S3_ENDPOINT_URL"), os.getenv("APP_S3_ENCRYPTION", "aws:kms"), os.getenv("APP_S3_KMS_KEY_ID"))
+    if backend == "s3": return S3Storage(os.getenv("APP_S3_BUCKET", ""), os.getenv("APP_S3_PREFIX", "icarus"), os.getenv("APP_S3_REGION"), os.getenv("APP_S3_ENDPOINT_URL"), os.getenv("APP_S3_ENCRYPTION", "aws:kms"), os.getenv("APP_S3_KMS_KEY_ID"))
     raise StorageError("APP_STORAGE_BACKEND must be 'local' or 's3'")

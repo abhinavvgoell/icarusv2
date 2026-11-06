@@ -12,11 +12,11 @@ RUN apt-get update \
     && python -m pip uninstall -y pip
 COPY app ./app
 COPY static ./static
-RUN useradd --create-home --uid 10001 arbiter && mkdir -p /var/lib/arbiter/uploads && chown -R arbiter:arbiter /app /var/lib/arbiter
-USER arbiter
+RUN useradd --create-home --uid 10001 icarus && mkdir -p /var/lib/icarus/uploads && chown -R icarus:icarus /app /var/lib/icarus
+USER icarus
 
-ENV APP_DATABASE_PATH=/var/lib/arbiter/prototype.db \
-    APP_UPLOAD_DIR=/var/lib/arbiter/uploads \
+ENV APP_DATABASE_PATH=/var/lib/icarus/prototype.db \
+    APP_UPLOAD_DIR=/var/lib/icarus/uploads \
     APP_ALLOWED_HOSTS=localhost
 
 EXPOSE 8000

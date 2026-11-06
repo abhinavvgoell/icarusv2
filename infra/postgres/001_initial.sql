@@ -1,4 +1,4 @@
--- Arbiter initial PostgreSQL schema. Apply through a reviewed migration pipeline.
+-- Icarus initial PostgreSQL schema. Apply through a reviewed migration pipeline.
 CREATE TABLE users (id BIGSERIAL PRIMARY KEY, email TEXT UNIQUE NOT NULL, role TEXT NOT NULL, organization_id TEXT, password_hash TEXT, active BOOLEAN NOT NULL DEFAULT TRUE, oidc_subject TEXT UNIQUE);
 CREATE TABLE sessions (token TEXT PRIMARY KEY, user_id BIGINT NOT NULL REFERENCES users(id), created_at TIMESTAMPTZ NOT NULL, expires_at TIMESTAMPTZ NOT NULL);
 CREATE INDEX sessions_expires_at_idx ON sessions(expires_at);

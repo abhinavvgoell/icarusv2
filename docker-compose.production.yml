@@ -1,6 +1,6 @@
 services:
-  arbiter:
-    image: ${ARBITER_IMAGE:?Set ARBITER_IMAGE to a published immutable image reference}
+  icarus:
+    image: ${ICARUS_IMAGE:?Set ICARUS_IMAGE to a published immutable image reference}
     ports:
       - "127.0.0.1:${APP_PORT:-8000}:8000"
     environment:
@@ -8,13 +8,13 @@ services:
       APP_BOOTSTRAP_DEMO_DATA: "false"
       APP_DATABASE_URL: ${APP_DATABASE_URL:?Supply the managed PostgreSQL URL from the secret manager}
       APP_STORAGE_BACKEND: s3
-      APP_UPLOAD_DIR: /tmp/arbiter-uploads
+      APP_UPLOAD_DIR: /tmp/icarus-uploads
       APP_MAX_UPLOAD_BYTES: ${APP_MAX_UPLOAD_BYTES:-5242880}
       APP_MAX_PDF_PAGES: ${APP_MAX_PDF_PAGES:-25}
       APP_S3_BUCKET: ${APP_S3_BUCKET:?Set the private S3 bucket}
       APP_S3_REGION: ${APP_S3_REGION:?Set the S3 region}
       APP_S3_ENDPOINT_URL: ${APP_S3_ENDPOINT_URL:-}
-      APP_S3_PREFIX: ${APP_S3_PREFIX:-arbiter}
+      APP_S3_PREFIX: ${APP_S3_PREFIX:-icarus}
       APP_S3_ENCRYPTION: aws:kms
       APP_S3_KMS_KEY_ID: ${APP_S3_KMS_KEY_ID:?Set the KMS key ID}
       APP_AUTH_MODE: oidc
@@ -26,7 +26,7 @@ services:
       APP_MALWARE_SCAN_MODE: clamav
       APP_CLAMAV_HOST: ${APP_CLAMAV_HOST:?Set the private ClamAV service hostname}
       APP_CLAMAV_PORT: ${APP_CLAMAV_PORT:-3310}
-      APP_ALLOWED_HOSTS: ${APP_ALLOWED_HOSTS:?Set the public Arbiter hostname}
+      APP_ALLOWED_HOSTS: ${APP_ALLOWED_HOSTS:?Set the public Icarus hostname}
       APP_ALLOWED_ORIGINS: ${APP_ALLOWED_ORIGINS:?Set the public HTTPS browser origin}
       APP_LOG_LEVEL: ${APP_LOG_LEVEL:-INFO}
     read_only: true

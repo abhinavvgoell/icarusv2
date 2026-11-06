@@ -91,7 +91,7 @@ td{padding:14px 22px;border-bottom:1px solid var(--bd);vertical-align:top;transi
 
 /* Document review record canvas */
 .record-sheet{background:#fff;color:#0f172a;border-radius:16px;border:2px solid #cbd5e1;box-shadow:0 10px 25px -5px rgba(0,0,0,0.06), 0 8px 10px -6px rgba(0,0,0,0.04);position:relative;overflow:hidden;margin:0 auto 16px}
-.record-sheet::before{content:"ARBITER REVIEW RECORD";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-size:38px;font-weight:900;color:rgba(15,74,50,0.035);letter-spacing:0.18em;pointer-events:none;white-space:nowrap;z-index:0}
+.record-sheet::before{content:"ICARUS REVIEW RECORD";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-size:38px;font-weight:900;color:rgba(15,74,50,0.035);letter-spacing:0.18em;pointer-events:none;white-space:nowrap;z-index:0}
 .record-header{background:linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);border-bottom:2px solid #e2e8f0;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:1}
 .record-emblem-wrap{display:flex;align-items:center;gap:12px}
 .record-emblem{width:42px;height:42px;border-radius:50%;background:var(--nv);color:#fff;display:grid;place-items:center;font-size:22px;box-shadow:0 2px 6px rgba(15,74,50,0.25);flex:none}

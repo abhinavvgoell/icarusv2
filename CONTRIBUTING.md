@@ -1,6 +1,6 @@
 # Contributing
 
-Arbiter is a document-review prototype. Contributions are welcome as long as
+Icarus is a document-review prototype. Contributions are welcome as long as
 they keep it honest: synthetic data only, advisory findings, and no claim that a
 test or measurement does not support.
 

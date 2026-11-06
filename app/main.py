@@ -59,7 +59,7 @@ async def lifespan(_: FastAPI):
         if demo_identity: raise RuntimeError("Production database contains synthetic .demo identities; migrate to a clean, reviewed production database")
     yield
 
-app = FastAPI(title="Arbiter — Document Compliance Review", lifespan=lifespan)
+app = FastAPI(title="Icarus — Document Compliance Review", lifespan=lifespan)
 app.add_middleware(SessionMiddleware, secret_key=SESSION_COOKIE_SECRET, https_only=APP_ENV == "production", same_site="lax")
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=ALLOWED_HOSTS)
 app.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS, allow_credentials=False, allow_methods=["GET", "POST", "PATCH"], allow_headers=["Authorization", "Content-Type", "X-Session-Token"])
@@ -107,9 +107,9 @@ def insert_id(conn, sql: str, params) -> int:
         return conn.execute(f"{sql} RETURNING id", params).fetchone()["id"]
     return conn.execute(sql, params).lastrowid
 
-def user(authorization: str | None = Header(None), x_session_token: str | None = Header(None), arbiter_session: str | None = Cookie(None)):
+def user(authorization: str | None = Header(None), x_session_token: str | None = Header(None), icarus_session: str | None = Cookie(None)):
     conn = db(); item = None
-    token = x_session_token or arbiter_session or (authorization.removeprefix("Bearer ").strip() if authorization and authorization.startswith("Bearer ") else None)
+    token = x_session_token or icarus_session or (authorization.removeprefix("Bearer ").strip() if authorization and authorization.startswith("Bearer ") else None)
     if token:
         token_hash = session_token_hash(token)
         item = conn.execute("SELECT u.* FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token=? AND s.expires_at > ? AND u.active=TRUE", (token_hash, now())).fetchone()
@@ -172,7 +172,7 @@ def init_db():
             has_applications = conn.execute("SELECT 1 FROM applications LIMIT 1").fetchone()
             if not has_users and not has_applications:
                 conn.executemany("INSERT INTO users(email, role, organization_id, password_hash) VALUES(?,?,?,?)", [
-                    ("submitter@northwind.demo", "submitter", "ORG-1001", hash_password("Submitter@123")), ("submitter@cascade.demo", "submitter", "ORG-1002", hash_password("Submitter@123")), ("reviewer@arbiter.demo", "reviewer", None, hash_password("Reviewer@123")), ("admin@arbiter.demo", "admin", None, hash_password("Admin@123"))])
+                    ("submitter@northwind.demo", "submitter", "ORG-1001", hash_password("Submitter@123")), ("submitter@cascade.demo", "submitter", "ORG-1002", hash_password("Submitter@123")), ("reviewer@icarus.demo", "reviewer", None, hash_password("Reviewer@123")), ("admin@icarus.demo", "admin", None, hash_password("Admin@123"))])
                 conn.executemany("INSERT INTO applications(reference, organization_id, organization_name, request_type, review_cycle, status, created_at, scope_name, requested_capacity) VALUES(?,?,?,?,?,?,?,?,?)", [
                     ("SUB-2026-1001", "ORG-1001", "Northwind Logistics Ltd", "licence_renewal", "2026-27", "draft", now(), "Bulk Storage", 120),
                     ("SUB-2026-1002", "ORG-1002", "Cascade Chemicals Ltd", "licence_renewal", "2026-27", "draft", now(), "Chemical Handling", 200)])
@@ -207,14 +207,14 @@ def init_db():
         except sqlite3.OperationalError: pass
     if BOOTSTRAP_DEMO_DATA and not conn.execute("SELECT 1 FROM users LIMIT 1").fetchone():
         conn.executemany("INSERT INTO users(email, role, organization_id, password_hash) VALUES(?,?,?,?)", [
-            ("submitter@northwind.demo", "submitter", "ORG-1001", hash_password("Submitter@123")), ("submitter@cascade.demo", "submitter", "ORG-1002", hash_password("Submitter@123")), ("reviewer@arbiter.demo", "reviewer", None, hash_password("Reviewer@123"))])
+            ("submitter@northwind.demo", "submitter", "ORG-1001", hash_password("Submitter@123")), ("submitter@cascade.demo", "submitter", "ORG-1002", hash_password("Submitter@123")), ("reviewer@icarus.demo", "reviewer", None, hash_password("Reviewer@123"))])
         conn.executemany("INSERT INTO applications(reference, organization_id, organization_name, request_type, review_cycle, status, created_at, scope_name, requested_capacity) VALUES(?,?,?,?,?,?,?,?,?)", [
             ("SUB-2026-1001", "ORG-1001", "Northwind Logistics Ltd", "licence_renewal", "2026-27", "draft", now(), "Bulk Storage", 120),
             ("SUB-2026-1002", "ORG-1002", "Cascade Chemicals Ltd", "licence_renewal", "2026-27", "draft", now(), "Chemical Handling", 200)])
         conn.commit()
         seed_documents(conn)
     if BOOTSTRAP_DEMO_DATA:
-        conn.execute("INSERT OR IGNORE INTO users(email, role, organization_id, password_hash) VALUES(?,?,?,?)", ("admin@arbiter.demo", "admin", None, hash_password("Admin@123")))
+        conn.execute("INSERT OR IGNORE INTO users(email, role, organization_id, password_hash) VALUES(?,?,?,?)", ("admin@icarus.demo", "admin", None, hash_password("Admin@123")))
     defaults = ["DOCS-REQUIRED-001", "NAME-MATCH-001", "FIELD-CONFLICT-001", "CAPACITY-MATCH-001", "SCOPE-MATCH-001", "EXPIRY-001", "DUPLICATE-001", "EXTRACT-001", "EXTRACT-002"]
     conn.executemany("INSERT OR IGNORE INTO rule_settings(rule_id, enabled, updated_at, updated_by) VALUES(?,1,?,?)", [(rule, now(), "system") for rule in defaults])
     seed_baseline_rule_pack(conn)
@@ -222,7 +222,7 @@ def init_db():
     conn.execute("UPDATE users SET active=1 WHERE active IS NULL")
     conn.execute("DELETE FROM sessions WHERE expires_at <= ?", (now(),))
     # Existing local demo databases predate password hashes.
-    for email, password in (("submitter@northwind.demo", "Submitter@123"), ("submitter@cascade.demo", "Submitter@123"), ("reviewer@arbiter.demo", "Reviewer@123")):
+    for email, password in (("submitter@northwind.demo", "Submitter@123"), ("submitter@cascade.demo", "Submitter@123"), ("reviewer@icarus.demo", "Reviewer@123")):
         conn.execute("UPDATE users SET password_hash=? WHERE email=? AND (password_hash IS NULL OR password_hash='')", (hash_password(password), email))
     conn.commit()
     if BOOTSTRAP_DEMO_DATA:
@@ -462,8 +462,8 @@ def oidc_client():
     except ImportError as exc:
         raise HTTPException(503, "OpenID Connect dependency is not installed") from exc
     oauth = OAuth()
-    oauth.register("arbiter", server_metadata_url=f"{issuer.rstrip('/')}/.well-known/openid-configuration", client_id=client_id, client_secret=client_secret, client_kwargs={"scope": "openid email profile"})
-    return oauth.arbiter
+    oauth.register("icarus", server_metadata_url=f"{issuer.rstrip('/')}/.well-known/openid-configuration", client_id=client_id, client_secret=client_secret, client_kwargs={"scope": "openid email profile"})
+    return oauth.icarus
 
 @app.get("/api/auth/oidc/login")
 async def oidc_login(request: Request):
@@ -476,23 +476,23 @@ async def oidc_callback(request: Request):
     email, subject = str(claims.get("email", "")).lower().strip(), str(claims.get("sub", ""))
     allowed_domains = {x.strip().lower() for x in os.getenv("APP_OIDC_ALLOWED_DOMAINS", "").split(",") if x.strip()}
     if not email or not subject or claims.get("email_verified") is not True or (allowed_domains and email.rsplit("@", 1)[-1] not in allowed_domains):
-        raise HTTPException(403, "Your identity-provider account is not eligible for Arbiter")
+        raise HTTPException(403, "Your identity-provider account is not eligible for Icarus")
     conn = db(); account = conn.execute("SELECT * FROM users WHERE email=? AND active=TRUE", (email,)).fetchone()
     if not account or not account["oidc_subject"] or account["oidc_subject"] != subject:
-        conn.close(); raise HTTPException(403, "Your account is not provisioned for Arbiter")
+        conn.close(); raise HTTPException(403, "Your account is not provisioned for Icarus")
     signed_token = secrets.token_urlsafe(32)
     conn.execute("INSERT INTO sessions(token,user_id,created_at,expires_at) VALUES(?,?,?,?)", (session_token_hash(signed_token), account["id"], now(), session_expiry()))
     conn.commit(); conn.close()
     response = RedirectResponse("/", status_code=303)
-    response.set_cookie("arbiter_session", signed_token, max_age=SESSION_TTL_HOURS * 3600, httponly=True, secure=APP_ENV == "production", samesite="lax")
+    response.set_cookie("icarus_session", signed_token, max_age=SESSION_TTL_HOURS * 3600, httponly=True, secure=APP_ENV == "production", samesite="lax")
     return response
 
 @app.post("/api/auth/logout")
-def logout(response: Response, actor=Depends(user), x_session_token: str | None = Header(None), authorization: str | None = Header(None), arbiter_session: str | None = Cookie(None)):
-    token = x_session_token or arbiter_session or (authorization.removeprefix("Bearer ").strip() if authorization and authorization.startswith("Bearer ") else None)
+def logout(response: Response, actor=Depends(user), x_session_token: str | None = Header(None), authorization: str | None = Header(None), icarus_session: str | None = Cookie(None)):
+    token = x_session_token or icarus_session or (authorization.removeprefix("Bearer ").strip() if authorization and authorization.startswith("Bearer ") else None)
     if token:
         conn = db(); conn.execute("DELETE FROM sessions WHERE token=?", (session_token_hash(token),)); conn.commit(); conn.close()
-    response.delete_cookie("arbiter_session")
+    response.delete_cookie("icarus_session")
     return {"ok": True}
 
 @app.post("/api/auth/password")

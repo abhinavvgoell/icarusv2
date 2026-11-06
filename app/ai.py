@@ -11,7 +11,7 @@ import os
 import re
 from pathlib import Path
 
-MODEL_ROOT = Path(os.getenv("APP_AI_MODEL_DIR", Path(__file__).resolve().parents[1] / "data" / "models" / "arbiter-ai"))
+MODEL_ROOT = Path(os.getenv("APP_AI_MODEL_DIR", Path(__file__).resolve().parents[1] / "data" / "models" / "icarus-ai"))
 CLASSIFIER_MODEL = "sentence-transformers/all-MiniLM-L6-v2@1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
 EXTRACTOR_MODEL = "Xenova/distilbert-base-cased-distilled-squad@bdbb0a5e9c617c3c7ea9f3cbaf2be3ad871bcd7d"
 CLASS_LABELS = {
@@ -30,7 +30,7 @@ FIELD_QUESTIONS = {
     "capacity": "What is the approved or sanctioned capacity number stated in this document?",
 }
 FIELD_PAGE_HINTS = {
-    "organization_name": re.compile(r"\b(organization|entity|company|issued\s+to|applicant)\b", re.I),
+    "organization_name": re.compile(r"\b(organization|entity|company|issued|applicant)\b", re.I),
     "certificate_number": re.compile(r"\b(certificate|reference|serial|number|registration)\b", re.I),
     "valid_until": re.compile(r"\b(valid|validity|expiry|expires?|expiration|until|through)\b", re.I),
     "scope_name": re.compile(r"\b(scope|service|product|category|approved\s+for|operations?)\b", re.I),

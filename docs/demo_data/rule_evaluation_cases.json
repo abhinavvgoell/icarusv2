@@ -1,5 +1,5 @@
 {
- "dataset_id": "arbiter-rule-evaluation-v1",
+ "dataset_id": "icarus-rule-evaluation-v1",
  "synthetic": true,
  "label_semantics": {
   "expected_rules": "Rule IDs that must fire at least once for this case after the officer runs the pre-check.",
